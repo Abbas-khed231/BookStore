@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import Skeleton from "react-loading-skeleton";
 import { Link } from "react-router-dom";
 import booksData from "../constant/Books";
 
