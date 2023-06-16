@@ -5,19 +5,21 @@ import Home from './components/Home';
 import BookListing from './components/BookListing';
 import Footer from './components/Footer';
 import BookDetails from './components/BookDetails';
-// import ShoppingCart from './pages/ShoppingCart';
-// import Checkout from './pages/Checkout';
-
+import ShoppingCart from './components/ShoppingCart';
+import Checkout from './components/Checkout';
+import OrderList from './components/OrderList';
 function App() {
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/Home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/book-listing" element={<BookListing />}  />
-        <Route path="/book-details/:id" component={BookDetails} />
-        {/* <Route path="/shopping-cart" component={ShoppingCart} />
-        <Route path="/checkout" component={Checkout} /> */}
+        <Route path="/book-details/:id" element={<BookDetails/>} />
+        <Route path="/shopping-cart" element={<ShoppingCart/>} />
+        <Route path="/checkout" element={<Checkout/>} />
+        <Route path="/order-list" element={<OrderList/>} />
+
       </Routes>
       <Footer/>
     </BrowserRouter>

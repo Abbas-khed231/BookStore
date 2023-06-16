@@ -1,139 +1,135 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import  Skeleton  from "react-loading-skeleton";
-import { useNavigate } from "react-router";
-import booksData from "../constant/Books"
-// import BookDetails from "./BookDetails";
+import Skeleton from "react-loading-skeleton";
+import { Link } from "react-router-dom";
+import booksData from "../constant/Books";
 
+function BookListing(props) {
+  const [bookData, setBookData] = useState([]);
 
-function BookListing() {
+  const [filter, setFilter] = useState([]);
 
-  const Loading = () => {
-    return (
-      <>
-        <div className="col-md-3">
-          <Skeleton height={350} />
-        </div>
+  useEffect(() => {
+    let componentMounted = true;
+    getBooks(componentMounted);
 
-        <div className="col-md-3">
-          <Skeleton height={350} />
-        </div>
+    setFilter(booksData)
 
-        <div className="col-md-3">
-          <Skeleton height={350} />
-        </div>
+    return () => {
+      componentMounted = false;
+    };
+  }, []);
 
-        <div className="col-md-3">
-          <Skeleton height={350} />
-        </div>
-      </>
-    );
+  const getBooks =  (componentMounted) => {
+    if (componentMounted) {
+      setFilter(bookData);
+    }
   };
 
-  const ShowProducts = () => {
-    // const navigate = useNavigate();
+  const filterProduct = (cat) => {
+    var recordsSorted = [];
 
-    // const handleBuy = () => {
-    //   navigate("/book detaisls");
-    // };
+    booksData.forEach((item,i)=>{
+      if(item.category === cat){
+        recordsSorted.push(item);
+      }
+    })
 
+    setFilter(recordsSorted);
+  };
+
+  
+
+  const ShowBooks = () => {
     return (
       <>
         <div className="buttons d-flex justify-content-center mb-5 pb-5">
           <button
             className="btn btn-outline-dark me-2"
+            onClick={() => setFilter(booksData)}
           >
             All
           </button>
           <button
             className="btn btn-outline-dark me-2"
+            onClick={() => filterProduct("Horror")}
           >
-            Mens Clothing
+            Horror
           </button>
           <button
             className="btn btn-outline-dark me-2"
+            onClick={() => filterProduct("Fairy")}
           >
-            Womens Clothing
+            Fairy
           </button>
           <button
             className="btn btn-outline-dark me-2"
+            onClick={() => filterProduct("Comedy")}
           >
-            Jewellery
+            Comedy
           </button>
           <button
             className="btn btn-outline-dark me-2"
+            onClick={() => filterProduct("Thriller")}
           >
-            Electronics
+            Thriller
+          </button>
+          <button
+            className="btn btn-outline-dark me-2"
+            onClick={() => filterProduct("Sci-fi")}
+          >
+            Sci-fi
           </button>
         </div>
-        {booksData.map((item) => {
-            return (
-              <>
-                <div className="col-md-3 mb-4">
-                  <div className="card h-100 text-center p-4" key={item.id}>
-                    <img
-                      src={item.image}
-                      height="350px"
-                      className="card-img-top"
-                      alt={item.title}
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title mb-0">
-                        {/* {item.title.substring(0, 12)}... */}
-                        {item.title}
-                      </h5>
-                      <p className="card-text lead fw-bolder">
-                        ${item.price}
-                      </p>
-                      <p className="card-text lead">
-                        Author:{item.author}
-                      </p>
-                      <button
-                        // onClick={handleBuy}
-                        className="btn btn-outline-dark"
-                      >
-                        Buy Now
-                      </button>
-
-                      {/* <button
-                        onClick={() => this.props.AddToCart(item)}
-                        className="btn btn-dark ms-3"
-                      >
-                        Add to Cart
-                      </button> */}
-                    </div>
+        {filter.length && filter.map((item) => {
+          return (
+            <>
+              <div className="col-md-3 mb-4">
+                <div className="card h-100 text-center p-4" key={item.id}>
+                  <img
+                    src={item.image}
+                    height="350px"
+                    className="card-img-top"
+                    alt={item.title}
+                  />
+                  <p className="card-text lead ">{item.category}</p>
+                  <div className="card-body">
+                    <h5 className="card-title mb-0">
+                      {item.title}
+                    </h5>
+                    <p className="card-text lead fw-bolder">${item.price}</p>
+                    <p className="card-text lead">Author:{item.author}</p>
+                    <Link
+                      to={`/book-details/${item.id}`}
+                      className="btn btn-outline-dark"
+                    >
+                      Buy Now
+                    </Link>
                   </div>
                 </div>
-              </>
-            );
-          })}
-        </>
-      );
-    };
-        
-    return (
-        <div>
-          <div className="container my-5 py-5">
-            <div className="row">
-              <div className="col-12">
-                <h1 className="display-6 fw-bolder text-center">
-                  Books
-                </h1>
-                <hr />
               </div>
-            </div>
-            <div className="row justify-content-center">
-                <ShowProducts/>
-            </div>
+            </>
+          );
+        })}
+      </>
+    );
+  };
+
+  return (
+    <div>
+      <div className="container my-5 py-5">
+        <div className="row">
+          <div className="col-12">
+            <h1 className="display-6 fw-bolder text-center">Books</h1>
+            <hr />
           </div>
         </div>
-      );
-    }
+        <div className="row justify-content-center">
+          <ShowBooks filter={filter} />
+        </div>
+      </div>
+    </div>
+  );
+}
 
-export default BookListing
-
-    
-
-    
-    
-         
+export default BookListing;
